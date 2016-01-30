@@ -41,12 +41,14 @@
           </div>
           <div id="input-wrapper">
             <label id="value-input-label" for="value-input">Enter Amount</label>
-            <input type="text" name="name" id="value-input" value=""  />
+            <input type="number" name="name" id="value-input" value=""  />
           </div>
           <div class="client">
             <a href="#" id="make-payment" data-role="button">Make Payment</a>
             <a href="#" id="add-balance" data-role="button">Add Balance</a>
-            <a href="#" id="create-balance" data-role="button">Create Balance</a>
+            <label id="value-input-label" for="phone-input">Enter Phone Number</label>
+            <input type="text" name="phone" id="phone-input" value=""  />
+            <a href="#" id="activate-card" data-role="button">Activate Card</a>
           </div>
           <div class="needy">
             <a href="#" id="get-meal" data-role="button">Get Meal!</a>
@@ -55,6 +57,8 @@
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/apiconnection.js"></script>
+        <script type="text/javascript" src="js/helper.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
