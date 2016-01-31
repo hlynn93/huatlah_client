@@ -51,7 +51,7 @@ $(document).off('click', '#add-balance').on('click', '#add-balance', function(ev
       nfc.addNdefListener(
         addBalance,
         function() {
-            alert("Listening for tags.");
+            alert("Close this and ready to tap!");
         },
         function() {
             alert("please try again.");
@@ -72,7 +72,7 @@ $(document).off('click', '#activate-card').on('click', '#activate-card', functio
       nfc.addNdefListener(
         activateCard,
         function() {
-            alert("Listening for tags.");
+            alert("Close this and ready to tap!");
         },
         function() {
             alert("please try again.");
@@ -91,7 +91,7 @@ $(document).off('click', '#make-payment').on('click', '#make-payment', function(
       nfc.addNdefListener(
         makeTransaction,
         function() {
-            alert("Listening for tags.");
+            alert("Close this and ready to tap!");
         },
         function() {
             alert("please try again.");
@@ -106,10 +106,10 @@ $(document).off('click', '#get-meal').on('click', '#get-meal', function(event) {
     nfc.addNdefListener(
       getMeal,
       function() {
-          alert("Listening for tags.");
+          alert("Close this and ready to tap!");
       },
       function() {
-          alert("please try again.");
+          //alert("please try again.");
       }
     );
 

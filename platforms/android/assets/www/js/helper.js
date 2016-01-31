@@ -81,7 +81,7 @@ function addRemoveListener(){
     addBalance
     ,
     function() {
-      alert("listener sucessfully removed");
+      //alert("listener sucessfully removed");
     },
     function() {
       alert("fails to remove listener");
@@ -96,7 +96,7 @@ function activateRemoveListener(){
     activateCard
     ,
     function() {
-      alert("listener sucessfully removed");
+      //alert("listener sucessfully removed");
     },
     function() {
       alert("fails to remove listener");
@@ -111,7 +111,7 @@ function transactionRemoveListener(){
     makeTransaction
     ,
     function() {
-      alert("listener sucessfully removed");
+      //alert("listener sucessfully removed");
     },
     function() {
       alert("fails to remove listener");
@@ -126,7 +126,7 @@ function mealRemoveListener(){
     getMeal
     ,
     function() {
-      alert("listener sucessfully removed");
+      //alert("listener sucessfully removed");
     },
     function() {
       alert("fails to remove listener");
