@@ -37,17 +37,17 @@ var app = {
 };
 
 var inputVal;
-var isWriting = false;
 
 
-$( "#add-balance" ).bind( "click", function(event, ui) {
+
+$(document).off('click', '#add-balance').on('click', '#add-balance', function(event) {
   if(!$("#value-input").val()){
     alert("Please input a value to write");
   }
   else {
-    if(!isWriting){
-      isWriting = true;
-      inputVal = $("#value-input").val();
+      // addBalance();
+
+      // inputVal = $("#value-input").val();
       nfc.addNdefListener(
         addBalance,
         function() {
@@ -57,39 +57,17 @@ $( "#add-balance" ).bind( "click", function(event, ui) {
             alert("please try again.");
         }
       );
-    }
+
   }
 });
 
-$( "#make-payment" ).bind( "click", function(event, ui) {
-  if(!$("#value-input").val()){
-    alert("Please input a value to write");
-  }
-  else{
-    if(!isWriting){
-      isWriting = true;
-      inputVal = $("#value-input").val();
-      nfc.addNdefListener(
-        makeTransaction,
-        function() {
-            alert("Listening for tags.");
-        },
-        function() {
-            alert("please try again.");
-        }
-      );
-    }
-  }
 
-});
-
-$( "#activate-card" ).bind( "click", function(event, ui) {
+$(document).off('click', '#activate-card').on('click', '#activate-card', function(event) {
   if(!$("#phone-input").val()){
     alert("Please input phone number");f
   }
   else{
-    if(!isWriting){
-      isWriting = true;
+
       inputVal = $("#phone-input").val();
       nfc.addNdefListener(
         activateCard,
@@ -101,12 +79,30 @@ $( "#activate-card" ).bind( "click", function(event, ui) {
         }
       );
     }
-  }
 });
 
-$( "#get-meal" ).bind( "click", function(event, ui) {
-  if(!isWriting){
-    isWriting = true;
+$(document).off('click', '#make-payment').on('click', '#make-payment', function(event) {
+  if(!$("#value-input").val()){
+    alert("Please input a value to write");
+  }
+  else{
+
+      // makeTransaction()
+      nfc.addNdefListener(
+        makeTransaction,
+        function() {
+            alert("Listening for tags.");
+        },
+        function() {
+            alert("please try again.");
+        }
+      );
+
+    }
+});
+
+
+$(document).off('click', '#get-meal').on('click', '#get-meal', function(event) {
     nfc.addNdefListener(
       getMeal,
       function() {
@@ -116,7 +112,7 @@ $( "#get-meal" ).bind( "click", function(event, ui) {
           alert("please try again.");
       }
     );
-  }
+
 });
 
 // Helper functions

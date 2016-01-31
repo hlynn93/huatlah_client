@@ -1,37 +1,25 @@
-function makeTransaction(nfcEvent) {
-  var previous_balance = readTag(nfcEvent);
-  var amount = parseInt(inputVal);
-  var current_balance = previous_balance - amount;
-  var record = ndef.textRecord(String(current_balance));
-  nfc.write(
-    [record],
-    function () {
-      transactionRemoveListener();
-      alert("Transaction Successful. Current Balance: $" + String(current_balance));
-    },
-    function (reason) {
-      transactionRemoveListener();
-      alert("fail");
-    }
-  );
-}
+// user_id = "fqwcK9bN7zCEreDvC";
+
+user_id = "58SiAhdEYR6JBuyeg";
 
 function activateCard(nfcEvent) {
 
     var phone = $("#phone-input").val();
-    alert("fun alert");
+    var current_balance = "0";
+    //alert("fun alert");
     var userId = findIdByIdByPhone(phone);
-    alert(userId);
+    //alert(userId);
     if(userId === "0"){
-      alert("Phone number not found");
+      //alert("Phone number not found");
     }else{
       alert("ID number found! : " + userId);
       var record = ndef.textRecord(userId);
       nfc.write(
         [record],
         function () {
+          current_balance = getCurrentBalance(userId);
           activateRemoveListener();
-          alert("Card Activated. Current Balance: $" + "0");
+          alert("Card Activated. Current Balance: $" + current_balance);
         },
         function (reason) {
           activateRemoveListener();
@@ -42,26 +30,22 @@ function activateCard(nfcEvent) {
 }
 
 function addBalance(nfcEvent) {
-  var previous_balance = readTag(nfcEvent);
-  var amount = parseInt(inputVal);
-  var current_balance = previous_balance + amount;
-  var record = ndef.textRecord(String(current_balance));
-  nfc.write(
-    [record],
-    function () {
-      addRemoveListener();
-      alert("Balance Added. Current Balance: $" + String(current_balance));
-    },
-    function (reason) {
-      addRemoveListener();
-      alert("fail");
-    }
-  );
+  var userId = readTagId(nfcEvent);
+  //alert("UserID : " + userId);
+  var amount = parseInt($("#value-input").val());
+  updateBalance(userId, amount);
+  alert("Balance Updated!");
+  addRemoveListener();
 }
 
 function getMeal(nfcEvent) {
   var tagId = readTagId(nfcEvent);
-  alert(tagId);
+  var tagIdRegexed = tagId.replace(/\W/g, '');
+  if(tagIdRegexed === "123fadsf"){
+      giveMeal(tagIdRegexed);
+  }else{
+    alert("DO NOT MATCH|123fadsf|" +tagIdRegexed );
+  }
   mealRemoveListener();
 }
 
@@ -77,6 +61,21 @@ function readTagId(nfcEvent){
   return outputVal.replace('en','');
 }
 
+
+function makeTransaction(nfcEvent) {
+  if(!$("#value-input").val()) {
+      alert("Please input an amount");
+  }
+  else {
+    var actual_amount = $("#value-input").val();
+    var userId = readTagId(nfcEvent)
+    var previous_balance = getCurrentBalance(userId);
+    var total_amount = Math.ceil(actual_amount)
+    var current_balance = pushTransaction(userId, total_amount, actual_amount);
+    alert("Transaction successful.");
+    transactionRemoveListener();
+  }
+}
 
 function addRemoveListener(){
 
@@ -97,7 +96,7 @@ function activateRemoveListener(){
 
   isWriting = false;
   nfc.removeNdefListener(
-    createBalance
+    activateCard
     ,
     function() {
       alert("listener sucessfully removed");
@@ -136,9 +135,4 @@ function mealRemoveListener(){
       alert("fails to remove listener");
     }
   );
-}
-
-function findUserIdByEmail(email) {
-  var userJSON = getUsers();
-  console.log(JSON.stringify(userJSON))
 }
