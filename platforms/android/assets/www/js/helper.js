@@ -41,11 +41,8 @@ function addBalance(nfcEvent) {
 function getMeal(nfcEvent) {
   var tagId = readTagId(nfcEvent);
   var tagIdRegexed = tagId.replace(/\W/g, '');
-  if(tagIdRegexed === "123fadsf"){
-      giveMeal(tagIdRegexed);
-  }else{
-    alert("DO NOT MATCH|123fadsf|" +tagIdRegexed );
-  }
+  giveMeal(tagIdRegexed);
+
   mealRemoveListener();
 }
 
@@ -69,9 +66,9 @@ function makeTransaction(nfcEvent) {
   else {
     var actual_amount = $("#value-input").val();
     var userId = readTagId(nfcEvent)
-    var previous_balance = getCurrentBalance(userId);
+    //var previous_balance = getCurrentBalance(userId);
     var total_amount = Math.ceil(actual_amount)
-    var current_balance = pushTransaction(userId, total_amount, actual_amount);
+    pushTransaction(userId, total_amount, actual_amount);
     alert("Transaction successful.");
     transactionRemoveListener();
   }

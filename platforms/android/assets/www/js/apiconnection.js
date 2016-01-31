@@ -1,17 +1,18 @@
-// var baseUrl = "http://128.114.26.26:3000/api/users/";
-// var updateFundUrl = "http://128.114.26.26:3000/fund/update/";
-// var updateUserUrl = "http://128.114.26.26:3000/users/addTransaction/";
-// var addBalanceUserUrl = "http://128.114.26.26:3000/users/addBalance/";
-// var transactionUrl = "http://128.114.26.26:3000/api/transactions/";
-// var fundUrl = "http://128.114.26.26:3000/api/fund/";
+var baseUrl = "http://128.114.26.26:3000/api/users/";
+var updateFundUrl = "http://128.114.26.26:3000/fund/update/";
+var updateUserUrl = "http://128.114.26.26:3000/users/addTransaction/";
+var addBalanceUserUrl = "http://128.114.26.26:3000/users/addBalance/";
+var transactionUrl = "http://128.114.26.26:3000/api/transactions/";
+var fundUrl = "http://128.114.26.26:3000/api/fund/";
+var needyUrl = "http://128.114.26.26:3000/needy/getMeal/";
 
-var baseUrl = "http://128.114.26.22:3000/api/users/";
-var updateFundUrl = "http://128.114.26.22:3000/fund/update/";
-var updateUserUrl = "http://128.114.26.22:3000/users/addTransaction/";
-var addBalanceUserUrl = "http://128.114.26.22:3000/users/addBalance/";
-var transactionUrl = "http://128.114.26.22:3000/api/transactions/";
-var fundUrl = "http://128.114.26.22:3000/api/fund/";
-var needyUrl = "http://128.114.26.22:3000/needy/getMeal/";
+// var baseUrl = "http://128.114.26.22:3000/api/users/";
+// var updateFundUrl = "http://128.114.26.22:3000/fund/update/";
+// var updateUserUrl = "http://128.114.26.22:3000/users/addTransaction/";
+// var addBalanceUserUrl = "http://128.114.26.22:3000/users/addBalance/";
+// var transactionUrl = "http://128.114.26.22:3000/api/transactions/";
+// var fundUrl = "http://128.114.26.22:3000/api/fund/";
+// var needyUrl = "http://128.114.26.22:3000/needy/getMeal/";
 
 
 function findIdByIdByPhone(phone) {
@@ -73,28 +74,26 @@ function getCurrentBalance(id) {
 function pushTransaction(userId, totalAmount, actualAmount) {
   var diff = (parseFloat(totalAmount) - parseFloat(actualAmount)).toString();
   console.log(" userID : " + userId + " | totalAmount : " + totalAmount + " | actualAmount: " + actualAmount + " | diff: " + diff);
+  var userIdRegexed = userId.replace(/\W/g, '');
   var current_balance = "0";
 
   $.ajax({
     type: "POST",
     url: transactionUrl,
     dataType: 'json',
-    data: { "customer_id": userId, "totalAmount" : totalAmount, "actualAmount" : actualAmount, "diffAmount" : diff },
+    data: { "customer_id": userIdRegexed, "totalAmount" : totalAmount, "actualAmount" : actualAmount, "diffAmount" : diff },
     async: false,
     success: function(data) {
       console.log("Transaction");
-      updateUser(userId, totalAmount, diff);
-
-      current_balance = getCurrentBalance(userId);
+      updateUser(userId, actualAmount, diff);
     }
   });
-  return current_balance;
 }
 
-function updateUser(userId, totalAmount, diff){
+function updateUser(userId, actualAmount, diff){
   userId = userId.replace(/\W/g, '');
   var userInfo;
-  var rPoints=0, mBalance=0;
+  var rPoints=0, mBalance=0.00;
   $.ajax({
     type: "GET",
     url: baseUrl + userId,
@@ -104,7 +103,7 @@ function updateUser(userId, totalAmount, diff){
       userInfo = data.data;
       console.log(" FIRST ONE" + JSON.stringify(userInfo));
       rPoints = Math.round(parseInt(diff*10));
-      mBalance = parseInt(totalAmount);
+      mBalance = parseFloat(actualAmount);
       userInfo.profile.rewardpoints = rPoints;
       userInfo.profile.moneybalance = mBalance;
       console.log(JSON.stringify(userInfo));
@@ -118,35 +117,6 @@ function updateUser(userId, totalAmount, diff){
      async: false,
      success: function(data){
        console.log("User Updated");
-     }
- });
- updateFund(diff);
-}
-
-function updateFund( diffAmount) {
-  var fund;
-  var fundId;
-  $.ajax({
-    type: "GET",
-    url: fundUrl,
-    dataType: 'json',
-    async: false,
-    success: function(data) {
-      fund = data.data[0];
-      fundId = fund._id;
-      console.log("FUND ID: " + fundId);
-      fund.amount += parseInt(diffAmount);
-      console.log("FUND AMOUNT: " + JSON.stringify(fund.amount));
-    }
-  });
-  $.ajax({
-    type: "PUT",
-     url: fundUrl + fundId,
-     dataType: 'json',
-     data: { amount: fund.amount },
-     async: false,
-     success: function(data){
-       console.log("FUND UPDATED");
      }
  });
 }
